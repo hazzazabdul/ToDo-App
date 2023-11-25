@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useState } from "react";
 import "./App.css";
 
 export default function App() {
@@ -23,10 +23,13 @@ export default function App() {
     setSelectedId(key);
   };
 
-  const deleteTodoItem = (key) => {
-    const filteredTodos = todos.filter((todo, id) => key !== id);
-    setTodos(filteredTodos);
-    setComplete(false);
+  const deleteTodoItem = (id) => {
+    const filteredTodos = todos.filter((todo, id) => selectedId !== id);
+    if (selectedId === id && complete) {
+      setTodos(filteredTodos);
+      setComplete(false);
+      setSelectedId(null);
+    }
   };
 
   return (
@@ -54,19 +57,20 @@ export default function App() {
             className="parentListItem"
             key={id}
           >
-            <li className="childListItem">
+            <li title={todo} className="childListItem">
               <label>
                 <input
-                  onClick={() => isChecked(id)}
+                  onClick={() => {
+                    isChecked(id);
+                  }}
                   type="checkbox"
-                  checked={complete && id === selectedId}
+                  checked={complete && id == selectedId}
                   onChange={() => setComplete(!complete)}
                 />
                 {todo}
               </label>
             </li>
             <button
-              disabled={!complete}
               onClick={() => deleteTodoItem(id)}
               className="btn btn-danger"
             >
